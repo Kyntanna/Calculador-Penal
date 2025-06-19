@@ -1,0 +1,82 @@
+import React, { useState } from "react";
+
+const crimes = [
+  { nome: "Prisão Disciplinar", pena: 50, multa: 150000, fianca: false },
+  { nome: "Corrupção Ativa/Passiva", pena: 50, multa: 150000, fianca: false },
+  { nome: "Desacato", pena: 50, multa: 150000, fianca: false },
+  { nome: "Prevaricação", pena: 50, multa: 150000, fianca: false },
+  { nome: "Impedir Exercício Profissional", pena: 50, multa: 150000, fianca: false },
+  { nome: "Uso Irregular de Função Pública", pena: 50, multa: 150000, fianca: false },
+  { nome: "Tentativa de Homicídio", pena: 100, multa: 300000, fianca: false },
+  { nome: "Homicídio Culposo", pena: 100, multa: 300000, fianca: false },
+  { nome: "Homicídio Doloso", pena: 150, multa: 300000, fianca: false },
+  { nome: "Latrocínio", pena: 150, multa: 400000, fianca: false },
+  { nome: "Assédio Moral", pena: 30, multa: 50000, fianca: true },
+  { nome: "Calúnia", pena: 40, multa: 100000, fianca: true },
+  { nome: "Difamação", pena: 30, multa: 50000, fianca: true },
+  { nome: "Injúria", pena: 30, multa: 50000, fianca: true },
+  { nome: "Assédio Sexual", pena: 40, multa: 100000, fianca: true },
+  { nome: "Perjúrio", pena: 30, multa: 50000, fianca: true },
+  { nome: "Violência Psicológica", pena: 30, multa: 100000, fianca: true },
+  { nome: "Danos Morais", pena: 0, multa: 100000, fianca: false },
+  { nome: "Sequestro", pena: 60, multa: 250000, fianca: false },
+  { nome: "Agressão Corporal", pena: 40, multa: 150000, fianca: true },
+  { nome: "Cárcere Privado", pena: 50, multa: 200000, fianca: false },
+  { nome: "Tortura", pena: 70, multa: 300000, fianca: false },
+  { nome: "Furto", pena: 40, multa: 150000, fianca: false },
+  { nome: "Roubo", pena: 80, multa: 250000, fianca: false },
+  { nome: "Extorsão", pena: 70, multa: 200000, fianca: false },
+  { nome: "Desmanche de Veículos", pena: 90, multa: 300000, fianca: false },
+  { nome: "Apropriação Indevida de Veículo", pena: 35, multa: 100000, fianca: false },
+  { nome: "Estelionato", pena: 50, multa: 150000, fianca: true },
+  { nome: "Invasão de Propriedade", pena: 40, multa: 100000, fianca: true },
+  { nome: "Dano à Propriedade Pública", pena: 45, multa: 120000, fianca: false },
+  { nome: "Vandalismo", pena: 30, multa: 80000, fianca: true },
+];
+
+export default function CalculadoraRP() {
+  const [selecionados, setSelecionados] = useState([]);
+
+  const toggleCrime = (crime) => {
+    setSelecionados((prev) =>
+      prev.includes(crime)
+        ? prev.filter((c) => c !== crime)
+        : [...prev, crime]
+    );
+  };
+
+  const calcularTotal = () => {
+    let totalPena = 0;
+    let totalMulta = 0;
+    selecionados.forEach((crime) => {
+      totalPena += crime.pena;
+      totalMulta += crime.multa;
+    });
+    return { totalPena, totalMulta };
+  };
+
+  const { totalPena, totalMulta } = calcularTotal();
+
+  return (
+    <div className="p-4 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Calculadora de Pena e Multa - Cartel City RP</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        {crimes.map((crime, index) => (
+          <label key={index} className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={selecionados.includes(crime)}
+              onChange={() => toggleCrime(crime)}
+            />
+            {crime.nome} - {crime.pena} meses - R$ {crime.multa.toLocaleString()}
+          </label>
+        ))}
+      </div>
+      <div className="mt-6 p-4 bg-gray-100 rounded-xl shadow">
+        <h2 className="text-xl font-semibold">Resultado</h2>
+        <p className="mt-2">Pena Total: <strong>{totalPena} meses</strong></p>
+        <p>Multa Total: <strong>R$ {totalMulta.toLocaleString()}</strong></p>
+      </div>
+    </div>
+  );
+}
