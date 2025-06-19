@@ -1,0 +1,114 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+
+const crimes = [
+  {
+    id: "tentativa_homicidio",
+    nome: "Tentativa de Homicídio",
+    multa: 300000,
+    pena: 100,
+  },
+  {
+    id: "homicidio_culposo",
+    nome: "Homicídio Culposo",
+    multa: 300000,
+    pena: 100,
+  },
+  {
+    id: "homicidio_doloso",
+    nome: "Homicídio Doloso",
+    multa: 300000,
+    pena: 150,
+  },
+  {
+    id: "latrocinio",
+    nome: "Latrocínio",
+    multa: 400000,
+    pena: 150,
+  },
+  {
+    id: "sequestro",
+    nome: "Sequestro",
+    multa: 250000,
+    pena: 60,
+  },
+  {
+    id: "furto",
+    nome: "Furto",
+    multa: 150000,
+    pena: 40,
+  },
+  {
+    id: "roubo",
+    nome: "Roubo",
+    multa: 250000,
+    pena: 80,
+  },
+  {
+    id: "porte_arma_leve",
+    nome: "Porte de Arma Leve (1 a 3)",
+    multa: 200000,
+    pena: 20,
+  },
+  {
+    id: "porte_arma_pesada",
+    nome: "Porte de Arma Pesada (1 a 3)",
+    multa: 200000,
+    pena: 30,
+  },
+  {
+    id: "trafico_drogas",
+    nome: "Tráfico de Drogas (100+)",
+    multa: 300000,
+    pena: 0,
+  },
+];
+
+export default function CalculadoraPenal() {
+  const [crimesSelecionados, setCrimesSelecionados] = useState([]);
+
+  const toggleCrime = (id) => {
+    setCrimesSelecionados((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+    );
+  };
+
+  const totalMulta = crimesSelecionados.reduce(
+    (acc, id) => acc + crimes.find((c) => c.id === id).multa,
+    0
+  );
+  const totalPena = crimesSelecionados.reduce(
+    (acc, id) => acc + crimes.find((c) => c.id === id).pena,
+    0
+  );
+
+  return (
+    <div className="p-6 max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Calculadora Penal RP - Cartel City</h1>
+      <div className="grid gap-4">
+        {crimes.map((crime) => (
+          <Card key={crime.id}>
+            <CardContent className="flex items-center space-x-4 p-4">
+              <Checkbox
+                id={crime.id}
+                checked={crimesSelecionados.includes(crime.id)}
+                onCheckedChange={() => toggleCrime(crime.id)}
+              />
+              <Label htmlFor={crime.id} className="flex-1 cursor-pointer">
+                {crime.nome} — <strong>Multa:</strong> R${crime.multa.toLocaleString()} / <strong>Pena:</strong> {crime.pena} meses
+              </Label>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="mt-8 p-4 bg-gray-100 rounded-xl shadow">
+        <h2 className="text-xl font-semibold mb-2">Resumo:</h2>
+        <p><strong>Total de Pena:</strong> {totalPena} meses</p>
+        <p><strong>Total de Multa:</strong> R$ {totalMulta.toLocaleString()}</p>
+      </div>
+    </div>
+  );
+}
